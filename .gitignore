@@ -1,0 +1,30 @@
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Build artifacts
+build/
+dist/
+
+# Modules
+vendor/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Go
+*.test
+coverage.out
+
+# Env
+.env
+
+# Docker
+.dockerignore

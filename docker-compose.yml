@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: golang_assessment
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d golang_assessment"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build: .
+    command: ["go", "run", "./cmd/server"]
+    environment:
+      DATABASE_URL: postgres://dev_user:mysecretpassword@db:5432/golang_assessment?sslmode=disable
+      PORT: 8080
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    working_dir: /app
+
+volumes:
+  db_data:
